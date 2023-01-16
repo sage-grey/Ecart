@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacinia varius nibh, nec dignissim leo.
+    Duis commodo eleifend arcu, id semper velit porttitor sit amet. Cras non consectetur leo. Morbi turpis neque,
+
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ category.name }} - ABC Store
+    {% else %}
+    OUTLET - ABC Store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<!--    {% if category %}-->
+<!--&lt;!&ndash;<div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <p><a href="{% url 'shop:AllProductCat' %}">products</a> </p>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--    {% endif %}-->
+<div>
+    {% if category %}
+    <img src="{{category.image.url}}" alt="{{category.name}}" class="catimg">
+</div>
+<br>
+<div>
+    <h1 class="text-center">{{category.name}}</h1>
+    <p class="text-center">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+<img src="{% static 'img/banner.png' %}" alt="OUR Products" width="100%">
+</div>
+<br>
+<div>
+    <h1 class="text-center">OUR PRODUCTS</h1>
+    <p class="text-center">Quisque tristique in tortor non vulputate. Donec aliquet est ut diam viverra lacinia. Donec sapien risus, tincidunt sollicitudin vehicula eu, tincidunt vel risus. Nam et leo quis tellus scelerisque mattis. In posuere auctor sagittis. Donec neque elit, lacinia non blandit id, imperdiet id nibh. In commodo eleifend ligula, id facilisis ligula elementum eu. Donec nibh lacus, tempus vitae vulputate eget, finibus at nisi. Vestibulum efficitur consectetur ipsum sit amet elementum.
+        Vestibulum in ex at dolor luctus posuere sed at urna. Donec fermentum semper justo eget tincidunt.</p>
+</div>
+    {% endif %}
+<div class="container-fluid">
+    <div class="row">
+        {% for i in product.object_list %}
+        <div class="col-xl-3 " style="padding:20px;">
+<div class="card" style="width: 20rem; height: 30rem; ">
+    <a href="{{i.get_url}}"> <img src="{{i.image.url}}" alt="{{i.name}}" class="card-img-top" alt="..." width="100%" height="250px"></a>
+  <div class="card-body">
+    <h5 class="card-title">{{i.name}}</h5>
+      <div class="price" >
+          <p class="card-text" ><img src="{% static 'img/icons/rupee.svg' %}" height="28px"><b>{{i.price}}</b></p>
+          </div>
+      <div class="text-center cart">
+    <a href="{% url 'cart_app:add_cart' i.id %}" class="btn btn-warning" style="color:black;">Add to Cart</a>
+<!--    </a> <a href="#" class="btn btn-success buy">Buy</a>-->
+          </div>
+  </div>
+</div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if product.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in product.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-dark btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+    <br>
+</div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+
+
+    OUTLET-Cart Page
+
+
+{% endblock %}
+{% block title %}
+ Cart - OutLet
+{% endblock %}
+{% block content %}
+{% if not cart_item %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my_title"> Your Cart Is Empty</h1>
+        <br>
+        <p class="text-center">
+
+        </p>
+    </div>
+</div>
+{% else %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my_title" style="font-family:Josefin Sans; color:" >
+            <b>Shopping Cart</b>
+        </h1>
+        <br>
+
+    </div>
+</div>
+<div class="container-fluid">
+<div class="row mx-auto">
+    <div class="col-12 cpl-sm-12 col-md-12 col-lg-8 text-center">
+        <table class="table my_custom_table">
+            <thead class="my_custom_thead">
+            <tr>
+                <th colspan="5">
+                    Your Items
+                </th>
+            </tr>
+
+            </thead>
+            <tbody>
+            {% for item in cart_item %}
+            <tr>
+                <td width="300px">
+                    <a href="item.product.get_absolute_url"><img src="{{item.product.image.url}}" alt="" class="float-left rounded " width="100%" height="200px"></a>
+                </td>
+                <td class="text-left" width="300px">
+                   <p align="left"> {{item.product.name}}
+                    <br>
+                    SKU:{{item.product.id}}
+                    <br>
+                     price: <img src="{% static 'img/icons/rupee.svg' %}" height="20px">{{item.product.price}}
+                    <br>
+                    Quantity : {{item.quantity}} x <img src="{% static 'img/icons/rupee.svg' %}" height="20px">{{item.product.price}}
+                   </p>
+                </td>
+
+                <td width="170px">
+                    <a href="" class="btn btn-warning"> <img src="{% static 'img/icons/rupee.svg' %}" height="20px" class="rupee"> {{item.sub_total}}</a>
+                </td>
+                {% if item.quantity < item.product.stock %}
+                <td width="200px">
+                    &nbsp;<a href="{% url 'cart_app:add_cart' item.product.id %}" class="btn btn-success btn-sm custom_a"><img src="{% static 'img/icons/plus.svg' %}" width="20px"></a>
+                    &nbsp;<a href="{% url 'cart_app:cart_remove' item.product.id %}" class="btn btn-danger btn-sm"><img src="{% static 'img/icons/dash.svg' %}" width="20px"></a>
+                    <br>
+                    <br>
+                    &nbsp;<a href="{% url 'cart_app:full_remove' item.product.id %}"><img src="{% static 'img/icons/trash.svg' %}" width="30px"></a>
+                </td>
+                {% else %}
+                <td>
+                    &nbsp;<a href="{% url 'cart_app:cart_remove' item.product.id %}" class="btn btn-danger btn-sm"><img src="{% static 'img/icons/dash.svg' %}" width="20px"></a>
+                    &nbsp;<a href="{% url 'cart_app:full_remove' item.product.id %}"><img src="{% static 'img/icons/trash.svg' %}" width="30px"></a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+<div class="col-12 cpl-sm-12 col-md-12 col-lg-4 text-center">
+    <table class="table my_custom_table">
+        <thead class="my_custom_table">
+        <tr>
+            <th>
+                Checkout
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                Please review your shopping cart items before proceeding with order payment
+            </td>
+        </tr>
+        <tr>
+            <td class="text-left">
+                Your Total is: <strong>{{total}}</strong>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="mx-auto">
+        <a href="{% url 'shop:AllProductCat' %}" class="btn btn-secondary btn-block my_custom_button">Continue</a>
+
+    </div>
+
+</div>
+</div>
+    </div>
+{% endif %}
+{% endblock %}
